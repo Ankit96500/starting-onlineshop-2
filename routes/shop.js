@@ -14,7 +14,12 @@ router.get('/products', shopController.getProducts);
 // add dynamic route
 router.get('/products/:productId',shopController.getProduct);
 
+
 router.get('/cart', shopController.getCart);
+
+// handel post request
+
+router.post('/cart',shopController.postCart);
 
 router.get('/orders', shopController.getOrders);
 

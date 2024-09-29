@@ -1,5 +1,7 @@
 // imported all product models
 const Product = require('../models/product');
+const Cart = require('../models/cart');
+
 
 // write our controller
 exports.getProducts = (req, res, next) => {
@@ -44,6 +46,18 @@ exports.getCart = (req, res, next) => {
     pageTitle: 'Your Cart'
   });
 };
+
+// handel post request
+exports.postCart = (req,res,next) =>{
+  const product_id = req.body.productId;
+  Product.findById(product_id,(product) =>{
+    Cart.addProduct(product_id,product.price)
+  });
+  console.log('product id',product_id);
+  res.redirect('/')
+  
+}
+
 
 exports.getOrders = (req, res, next) => {
   res.render('shop/orders', {
