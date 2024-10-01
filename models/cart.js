@@ -8,7 +8,7 @@ const p = path.join(
     'data',
     'cart.json'
 )
-console.log('show me path in cart',p);
+// console.log('show me path in cart',p);
 
 module.exports = class Cart{
    static addProduct(id,productPrice){

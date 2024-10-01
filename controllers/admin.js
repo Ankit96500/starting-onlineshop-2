@@ -16,21 +16,25 @@ exports.postAddProduct = (req, res, next) => {
   const product = new Product(null,title, imageUrl, description, price);
   // console.log('added product',product);
   
-  product.save();
-  res.redirect('/');
+  product.save()
+  .then(()=>{
+    res.redirect('/');
+  })
+  .catch(err=>{console.log(err);
+  });
 };
 
 
 exports.getEditProduct = (req, res, next) => {
   const editMode =  req.query.edit
-  console.log('editmode param',editMode);
+  // console.log('editmode param',editMode);
   
   // if not editmode
   if (!editMode) {
     return res.redirect('/');
   }
   const prodID = req.params.productId;
-  console.log('request parameste param',req.params);
+  // console.log('request parameste param',req.params);
   Product.findById(prodID,(product)=>{
     
     // if not product 
@@ -61,21 +65,29 @@ exports.postEditProduct = (req,res,next)=>{
 
 // show all admins product
 exports.getProducts = (req, res, next) => {
-  Product.fetchAll(products => {
-    // console.log('updated product record',products);
-    
+  Product.fetchAll()
+  .then(([rows,fieldData])=>{
     res.render('admin/products', {
-      prods: products,
+      prods: rows,
       pageTitle: 'Admin Products',
       path: '/admin/products'
     });
+  })
+  .catch(err=>{
+    console.log(err);
   });
 };
 
 exports.postDeleteProduct = (req,res,next)=>{
   const prodID = req.body.productId;
-  Product.deleteById(prodID);
-  res.redirect('/admin/products');
+  Product.deleteById(prodID)
+  .then(()=>{
+    res.redirect('/admin/products');
+  })
+  .catch(err=>{
+    console.log('not deleted',err);
+    
+  });
 }
 
 

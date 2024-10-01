@@ -6,6 +6,17 @@ const app = express();
 
 app.use(bodyParser.urlencoded({ extended: false }));
 
+//connect database
+// const db = require('./util/database.js')
+
+// db.execute('SELECT * FROM products')
+// .then((result)=>{
+//     console.log(result);
+// })
+// .catch(err=>{
+//     console.log(err);
+    
+// })
 
 // error- controller
 const errorController = require('./controllers/error');
@@ -17,6 +28,7 @@ app.set('views', 'views');
 // load routes
 const adminRoutes = require('./routes/admin');
 const shopRoutes = require('./routes/shop');
+const { log } = require('console');
 
 // server static
 app.use(express.static(path.join(__dirname, 'public')));

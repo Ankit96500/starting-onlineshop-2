@@ -5,38 +5,48 @@ const Cart = require('../models/cart');
 
 // write our controller
 exports.getProducts = (req, res, next) => {
-  Product.fetchAll(products => {
-    res.render('shop/product-list', {
-      prods: products,
-      pageTitle: 'All Products',
-      path: '/products'
-    });
+  Product.fetchAll()
+  .then(([rows,fieldData])=>{
+      res.render('shop/product-list',{
+        prods:rows,
+        pageTitle:"All pRoducts",
+        path: './products' 
+      });
+  })
+  .catch(err=>{
+    console.log(err);
   });
 };
 
 // it take dynamic route parameter
 exports.getProduct = (req,res,next)=>{
   const product_id = req.params.productId
-  Product.findById(product_id,product =>{
-    console.log('product-->',product);
-    res.render('shop/product-detail',{
-      product:product,
-      pageTitle:product.title,
-      path:'/products'  
-    })
+  // console.log('productd id',product_id);
+  Product.findById(product_id) 
+  .then(([product])=>{
+    console.log('rwows',product);
+    res.render('shop/product-detail', {
+      product: product[0],
+      pageTitle: product.title,
+      path: '/products'
+    });
   })
-  
+  .catch((err)=>{
+    console.log('err');
+  });
 }
 
-
-
 exports.getIndex = (req, res, next) => {
-  Product.fetchAll(products => {
+  Product.fetchAll()
+  .then(([rows,fieldData])=>{
     res.render('shop/index', {
-      prods: products,
+      prods: rows,
       pageTitle: 'Shop',
       path: '/'
     });
+  })
+  .catch((err)=>{
+    console.log('err');
   });
 };
 
@@ -53,7 +63,7 @@ exports.postCart = (req,res,next) =>{
   Product.findById(product_id,(product) =>{
     Cart.addProduct(product_id,product.price)
   });
-  console.log('product id',product_id);
+  // console.log('product id',product_id);
   res.redirect('/')
   
 }
