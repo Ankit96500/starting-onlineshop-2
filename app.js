@@ -6,17 +6,7 @@ const app = express();
 
 app.use(bodyParser.urlencoded({ extended: false }));
 
-//connect database
-// const db = require('./util/database.js')
-
-// db.execute('SELECT * FROM products')
-// .then((result)=>{
-//     console.log(result);
-// })
-// .catch(err=>{
-//     console.log(err);
-    
-// })
+const sequelize = require('./util/database.js')
 
 // error- controller
 const errorController = require('./controllers/error');
@@ -38,5 +28,16 @@ app.use('/admin', adminRoutes);
 app.use(shopRoutes);
 app.use(errorController.get404);
 
-// server lintening...
-app.listen(3000);
+
+//call sequelize to make table
+sequelize.sync()
+.then(result => {
+    // console.log(result);
+    // server lintening...
+    app.listen(3000);
+    
+})
+.catch(err =>{
+    console.log(err);
+    
+})
