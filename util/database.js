@@ -16,12 +16,12 @@
 // const sequelize = new Sequelize('nodejs','root','1Ankit@2002',{dialect:'mysql',host:'localhost'});
 
 // export { sequelize }
-
-const Sequelize = require('sequelize');
+// sequelize works with promises..
+import Sequelize from 'sequelize';
 
 const sequelize = new Sequelize('nodejs','root','1Ankit@2002',{dialect:'mysql',host:'localhost'});
 
-module.exports= sequelize;
+export default sequelize;
 
 
 

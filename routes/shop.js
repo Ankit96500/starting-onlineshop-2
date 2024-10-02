@@ -1,28 +1,28 @@
-const path = require('path');
+import path from 'path';
 
-const express = require('express');
+import { Router } from 'express';
 
-const shopController = require('../controllers/shop');
+import { getIndex, getProducts, getProduct, getCart, postCart, getOrders, getCheckout } from '../controllers/shop.js';
 
-const router = express.Router();
+const router = Router();
 
-router.get('/', shopController.getIndex);
+router.get('/', getIndex);
 
 // normal route
-router.get('/products', shopController.getProducts);
+router.get('/products', getProducts);
 
 // add dynamic route
-router.get('/products/:productId',shopController.getProduct);
+router.get('/products/:productId',getProduct);
 
 
-router.get('/cart', shopController.getCart);
+router.get('/cart', getCart);
 
 // handel post request
 
-router.post('/cart',shopController.postCart);
+router.post('/cart',postCart);
 
-router.get('/orders', shopController.getOrders);
+router.get('/orders', getOrders);
 
-router.get('/checkout', shopController.getCheckout);
+router.get('/checkout', getCheckout);
 
-module.exports = router;
+export default router;

@@ -1,19 +1,19 @@
 
-const fs = require('fs');
-const path = require('path');
-const { postDeleteProduct } = require('../controllers/admin');
+import { readFile, writeFile } from 'fs';
+import { join } from 'path';
+import { postDeleteProduct } from '../controllers/admin.js';
 //path
-const p = path.join(
+const p = join(
     process.cwd(),
     'data',
     'cart.json'
 )
 // console.log('show me path in cart',p);
 
-module.exports = class Cart{
+export default class Cart{
    static addProduct(id,productPrice){
     // fetch previous cart
-    fs.readFile(p,(err,filecontent)=>{
+    readFile(p,(err,filecontent)=>{
         let cart = {products:[], totalPrice: 0};
         //dont have an error
         if(!err){
@@ -36,14 +36,14 @@ module.exports = class Cart{
             cart.products = [...cart.products,updatedProduct];
         }
         cart.totalPrice = cart.totalPrice + +productPrice;
-        fs.writeFile(p,JSON.stringify(cart),err =>{
+        writeFile(p,JSON.stringify(cart),err =>{
             console.log('err',err);
         });
     });
    }
    // delete product cart:
    static deleteProduct(id,productPrice){
-    fs.readFile(p,(err,filecontent)=>{
+    readFile(p,(err,filecontent)=>{
         // no cart ignore this
         if (err) {
             return;
@@ -53,7 +53,7 @@ module.exports = class Cart{
         const  productQty = product.qty;
         updatedCart.products = updatedCart.products.filter(prod => prod.id !== id);
         updatedCart.totalPrice = updatedCart.totalPrice - productPrice * productQty;
-        fs.writeFile(p,JSON.stringify(updatedCart),err =>{
+        writeFile(p,JSON.stringify(updatedCart),err =>{
             console.log('err',err);
         });
 

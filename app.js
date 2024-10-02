@@ -1,32 +1,32 @@
-const path = require('path');
+import { join } from 'path';
 
-const express = require('express');
-const bodyParser = require('body-parser');
+import express from 'express';
+import bodyParser  from 'body-parser';
 const app = express();
-
 app.use(bodyParser.urlencoded({ extended: false }));
 
-const sequelize = require('./util/database.js')
+import sequelize  from './util/database.js';
 
 // error- controller
-const errorController = require('./controllers/error');
+import { get404 } from './controllers/error.js';
 
 // set template engine
 app.set('view engine', 'ejs');
 app.set('views', 'views');
 
 // load routes
-const adminRoutes = require('./routes/admin');
-const shopRoutes = require('./routes/shop');
-const { log } = require('console');
+import adminRoutes from './routes/admin.js';
+import shopRoutes from './routes/shop.js';
+import { log } from 'console';
+
 
 // server static
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(join(process.cwd(), 'public')));
 
 //load routes
 app.use('/admin', adminRoutes);
 app.use(shopRoutes);
-app.use(errorController.get404);
+app.use(get404);
 
 
 //call sequelize to make table

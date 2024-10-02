@@ -8,9 +8,11 @@
     "start": "nodemon app.js",
     "start-server": "node app.js"
   },
+  "type": "module",
   "author": "Ankit Sharma",
   "license": "ISC",
   "devDependencies": {
+    "@types/sequelize": "^4.28.20",
     "nodemon": "^1.18.3"
   },
   "dependencies": {
