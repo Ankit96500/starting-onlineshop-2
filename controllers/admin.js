@@ -1,4 +1,6 @@
+import { where } from 'sequelize';
 import Product  from '../models/product.js';
+import User from '../models/user.js';
 
 export function getAddProduct(req, res, next) {
   res.render('admin/edit-product', {
@@ -13,32 +15,43 @@ export function postAddProduct(req, res, next) {
   const imageUrl = req.body.imageUrl;
   const price = req.body.price;
   const description = req.body.description;
-  Product.create({
+  //new way not work..
+  // req.user.CreateProduct({
+  //   title:title,
+  //   price:price,
+  //   imageUrl:imageUrl,
+  //   description:description,
+  // })
+  
+  // old way to insert
+  Product.create({    
     title:title,
     price:price,
     imageUrl:imageUrl,
-    description:description
-  }).then(result=>{
+    description:description,
+    userId:req.user.id
+  })
+  .then(result=>{
     // console.log(result);
-    console.log('created data');
+    console.log('created data',result);
     res.redirect('/admin/products')
   })
-  .catch(err=>{console.log(err);
+  .catch(err=>{console.log('-->',err);
   })
 }
 
-
 export function getEditProduct(req, res, next) {
   const editMode =  req.query.edit
-  // console.log('editmode param',editMode);
   
   // if not editmode
   if (!editMode) {
     return res.redirect('/');
   }
   const prodID = req.params.productId;
-  // console.log('request parameste param',req.params);
-  Product.findByPk(prodID).then(product=>{  
+  req.user.getProducts({where:{id:prodID}})
+  // Product.findByPk(prodID)
+  .then(products=>{  
+    const product = products[0];
     // if not product 
     if (!product) {
       return res.redirect('/');
@@ -81,14 +94,21 @@ export function postEditProduct(req,res,next){
 
 // show all admins product
 export function getProducts(req, res, next) {
-  Product.findAll()
+  // Product.findAll()
+  req.user.getProducts()
   .then((products)=>{
+    console.log('show my peouds',products);
     res.render('admin/products', {
       prods: products,
       pageTitle: 'Admin Products',
       path: '/admin/products'
     });
   })
+  // User.findAll()
+  // .then((users)=>{
+  //   console.log('show my users',users);
+  //   res.json(users);
+  // })
   .catch(err=>{
     console.log(err);
   });

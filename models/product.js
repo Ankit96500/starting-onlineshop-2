@@ -7,12 +7,10 @@ const Product = sequelize.define('product',{
   
   title:{type:STRING},
   
-  price:{type: DOUBLE,allowNull:false},
+  price:{type: DOUBLE,allowNull:true},
   
-  imageUrl:{type:STRING,allowNull: false},
+  imageUrl:{type:STRING,allowNull: true},
 
-  description :{ type:STRING,allowNull:false}
+  description :{ type:STRING,allowNull:true}
 });
 export default Product;
-
-

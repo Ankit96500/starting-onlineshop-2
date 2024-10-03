@@ -1,11 +1,16 @@
-import { Sequelize } from "sequelize";
+// import { Sequelize } from "sequelize";
+import { INTEGER } from "sequelize";
 import sequelize from "../util/database.js";
-import { name } from "ejs";
+import { STRING } from "sequelize";
+
 
 const User  = sequelize.define('user',{
-    id:{type:Sequelize.INTEGER,autoIncrement:true,allowNull:false,primaryKey:true},
-    name:{type:Sequelize.STRING},
-    email:{ype: Sequelize.STRING}
+    id :{type:INTEGER,allowNull:false,primaryKey:true,autoIncrement: true},
+    
+    name :{type:STRING,allowNull:true},
+    phone_no :{type:INTEGER,allowNull:true},
+    
+    email:{type:STRING,allowNull:true, unique: true, }
 });
 
-export {User}
+export default User;
