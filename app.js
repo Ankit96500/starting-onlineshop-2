@@ -1,5 +1,4 @@
 import { join } from 'path';
-
 import express from 'express';
 import bodyParser  from 'body-parser';
 // import cors from 'cors';
@@ -12,6 +11,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.set('view engine', 'ejs');
 app.set('views', 'views');
 
+
+// server static
+app.use(express.static(join(process.cwd(), 'public')));
 
 // anonynomus func middelware so that i acces this user anywhere in the project
 app.use((req,res,next) =>{
@@ -29,6 +31,8 @@ app.use((req,res,next) =>{
 
 import User from './models/user.js';
 import Product from './models/product.js';
+import Cart from './models/cart.js';
+import CartItem from './models/card-item.js';
 import sequelize  from './util/database.js';
 
 // error- controller
@@ -37,11 +41,6 @@ import { get404 } from './controllers/error.js';
 // load routes
 import adminRoutes from './routes/admin.js';
 import shopRoutes from './routes/shop.js';
-
-
-
-// server static
-app.use(express.static(join(process.cwd(), 'public')));
 
 //load routes
 app.use('/admin', adminRoutes);
@@ -53,9 +52,15 @@ app.use(get404);
 // sequelize.sync({ force: false })  // { force: true } will drop and recreate tables, use carefully
 
 // make relation in between user and product
+// ADD REALTIONS::::
 Product.belongsTo(User,{constraints:true,onDelete:'CASCADE'});
 User.hasMany(Product);
+User.hasOne(Cart);
+Cart.belongsTo(User);
+Cart.belongsToMany(Product,{through:CartItem});
+Product.belongsToMany(Cart,{through:CartItem});
 
+// we ceate user if no user we have and cart also
 sequelize
 // .sync({force:true})
 .sync()
@@ -74,10 +79,14 @@ sequelize
     return user;
 })
 .then(user =>{
-    console.log(user);
+    return user.createCart();
+
+})
+.then(cart=>{
     app.listen(3000);
 
 })
+
 .catch(err =>{
     console.log(err);
     

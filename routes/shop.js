@@ -2,7 +2,7 @@ import path from 'path';
 
 import { Router } from 'express';
 
-import { getIndex, getProducts, getProduct, getCart, postCart, getOrders, getCheckout } from '../controllers/shop.js';
+import { getIndex, getProducts, getProduct, getCart, postCart, getOrders, getCheckout ,postCartDeleteProduct} from '../controllers/shop.js';
 
 const router = Router();
 
@@ -20,6 +20,7 @@ router.get('/cart', getCart);
 // handel post request
 
 router.post('/cart',postCart);
+router.post('/delete-cart',postCartDeleteProduct);
 
 router.get('/orders', getOrders);
 
